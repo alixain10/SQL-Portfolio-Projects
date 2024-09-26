@@ -1,28 +1,28 @@
----------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------
 -----------------------------Feature Engineering----------------------------------------------
----------------------------------time_of_day------------------------------------------------
+---------------------------------time_of_day--------------------------------------------------
+
 SELECT 
-	time,
-    (CASE 
-		WHEN time BETWEEN "00:00:00" AND "12:00:00" THEN "Morning"
-		WHEN time BETWEEN "12:01:00" AND "16:00:00" THEN "Afternoon"
-        ELSE "Evening"
-	END
-	) AS time_of_date
+time,
+(CASE 
+WHEN time BETWEEN "00:00:00" AND "12:00:00" THEN "Morning"
+WHEN time BETWEEN "12:01:00" AND "16:00:00" THEN "Afternoon"
+ELSE "Evening"
+END
+) AS time_of_date
 FROM sales;
 
 ALTER TABLE sales ADD COLUMN time_of_day VARCHAR(20)
 
 UPDATE sales
 SET time_of_day = ( 
-    CASE 
-		WHEN time BETWEEN "00:00:00" AND "12:00:00" THEN "Morning"
-		WHEN time BETWEEN "12:01:00" AND "16:00:00" THEN "Afternoon"
-        ELSE "Evening"
-	END
-	); 
+CASE 
+WHEN time BETWEEN "00:00:00" AND "12:00:00" THEN "Morning"
+WHEN time BETWEEN "12:01:00" AND "16:00:00" THEN "Afternoon"
+ELSE "Evening"
+END); 
     
-    -----------------------------------day_name--------------------------------------------
+-----------------------------------Creating the table day_name--------------------------------------------
     
 SELECT date,DAYNAME(date) FROM sales
     
@@ -32,7 +32,8 @@ UPDATE sales
 SET day_name = DAYNAME(date)
 
 
------------------------------month_name----------------------------------
+-----------------------------Creating the table month_name----------------------------------
+	
 SELECT date,MONTHNAME(date)
 FROM sales
 
@@ -41,7 +42,7 @@ ALTER TABLE sales ADD COLUMN month_name VARCHAR(10);
 UPDATE sales
 SET month_name = MONTHNAME(date)
 
-----------------------------Exploratory Data Analysis (EDA)--------------------------------
+----------------------------Exploratory Data Analysis (EDA)------------------------------------
 --------------------------------Generic Questions----------------------------------------------
 
 --How many unique cities does the data have?
@@ -50,10 +51,9 @@ SELECT COUNT(DISTINCT city) FROM sales
 --In which city is each branch?
 SELECT DISTINCT(city),branch FROM sales
 
----------------------------------------Product---------------------------------------------
+---------------------------------------Product-------------------------------------------------
 
 --How many unique product lines does the data have?
-SELECT DISTINCT product_line FROM sales
 SELECT COUNT(DISTINCT product_line) FROM sales
 
 --What is the most common payment method?
@@ -113,7 +113,8 @@ GROUP BY branch
 HAVING SUM(quantity) > (SELECT AVG(quantity) FROM sales)
 
 --------------------------------------Sales--------------------------------------------------
--Number of sales made in each time of the day per weekday
+	
+--Number of sales made in each time of the day per weekday
 SELECT quantity,time,day_name
 FROM sales
 WHERE day_name IN ('Monday','Tuesday','Wednesday','Thursday','Friday')
@@ -140,6 +141,7 @@ ORDER BY SUM(VAT) DESC
 LIMIT 1
 
 -----------------------------------Customer------------------------------------------------
+
 --How many unique customer types does the data have?
 SELECT COUNT(DISTINCT customer_type) AS unique_customer_types FROM sales
 
